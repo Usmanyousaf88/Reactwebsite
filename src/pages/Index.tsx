@@ -31,7 +31,7 @@ const Index = () => {
       </div>
 
       <nav className={cx('navigation')}>
-        <div className={cx('logo')}>Earls</div>
+        <Link to="/" className={cx('logo')}>Earls</Link>
         <div className={cx('nav-links')}>
           <Link to="/" className={cx('nav-link')}>HOME</Link>
           <Link to="/about" className={cx('nav-link')}>ABOUT US</Link>
