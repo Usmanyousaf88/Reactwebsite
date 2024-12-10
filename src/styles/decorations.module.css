@@ -1,0 +1,38 @@
+.glowOrb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.topOrb {
+  width: 300px;
+  height: 300px;
+  background: linear-gradient(45deg, rgba(196, 164, 124, 0.3), rgba(139, 92, 246, 0.3));
+  top: -150px;
+  right: -150px;
+}
+
+.bottomOrb {
+  width: 250px;
+  height: 250px;
+  background: linear-gradient(45deg, rgba(139, 92, 246, 0.3), rgba(196, 164, 124, 0.3));
+  bottom: -125px;
+  left: -125px;
+}
+
+.gradientBorder {
+  position: relative;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  border-radius: 12px;
+  background: linear-gradient(#0c1214, #0c1214) padding-box,
+              linear-gradient(45deg, #c4a47c, #8B5CF6) border-box;
+}
+
+.glassMorphism {
+  background: rgba(12, 18, 20, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
