@@ -1,88 +1,205 @@
 import { Link } from 'react-router-dom';
-import { MapPin, Phone, Star, Clock, Mail, ArrowRight } from 'lucide-react';
-import classNames from 'classnames/bind';
+import { MapPin, Phone, Star, Clock, Mail, ArrowRight, ChevronRight, Heart, Award, Sparkles } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
 import styles from './Index.module.css';
-import animations from '../styles/animations.module.css';
-import decorations from '../styles/decorations.module.css';
-
-const cx = classNames.bind(styles);
-const ax = classNames.bind(animations);
-const dx = classNames.bind(decorations);
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { useToast } from "@/components/ui/use-toast";
 
 const Index = () => {
+  const { toast } = useToast();
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const currentScroll = window.scrollY;
+      setScrollProgress((currentScroll / totalScroll) * 100);
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('mousemove', handleMouseMove);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
+
   return (
-    <div className={cx('container')}>
-      <div className={dx('glowOrb', 'topOrb')} />
-      <div className={dx('glowOrb', 'bottomOrb')} />
-
-      <div className={cx('top-section', dx('glassMorphism'))}>
-        <div className={cx('info-container')}>
-          <div className={cx('address-info', ax('floating'))}>
-            <MapPin className={cx('icon')} />
-            <div className={cx('info-content', dx('gradientBorder'))}>
-              <h3 className={cx('info-title')}>Address</h3>
-              <p className={cx('info-text')}>Street: 3840 Winifred Way, Marion,</p>
-              <p className={cx('info-text')}>United States</p>
-            </div>
-          </div>
-
-          <div className={cx('contact-info', ax('floating'))}>
-            <Phone className={cx('icon')} />
-            <div className={cx('info-content', dx('gradientBorder'))}>
-              <h3 className={cx('info-title')}>Contact Us</h3>
-              <p className={cx('info-text')}>(123) 23456 789 123 4578 954</p>
-              <p className={cx('info-text')}>Open: 09:00 am - 01:00 pm</p>
-            </div>
-          </div>
-
-          <div className={cx('extra-info', ax('floating'))}>
-            <Mail className={cx('icon')} />
-            <div className={cx('info-content', dx('gradientBorder'))}>
-              <h3 className={cx('info-title')}>Email Us</h3>
-              <p className={cx('info-text')}>info@earls.com</p>
-              <p className={cx('info-text')}>support@earls.com</p>
-            </div>
-          </div>
-        </div>
+    <div className={styles.container}>
+      <div className={styles.scrollProgress}>
+        <Progress value={scrollProgress} className="w-full h-1" />
       </div>
 
-      <nav className={cx('navigation')}>
-        <Link to="/" className={cx('logo', ax('pulsing'))}>
-          <Star className={cx('logo-icon', ax('rotating'))} />
+      <div className={styles.mouseCursor} style={{ 
+        left: `${mousePosition.x}px`, 
+        top: `${mousePosition.y}px` 
+      }} />
+
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className={styles.topSection}
+      >
+        <div className={styles.infoContainer}>
+          <motion.div 
+            className={styles.addressInfo}
+            initial={{ x: -100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.8, type: "spring" }}
+          >
+            <MapPin className={styles.icon} />
+            <div className={styles.infoContent}>
+              <h3 className={styles.infoTitle}>Address</h3>
+              <p className={styles.infoText}>3840 Winifred Way, Marion</p>
+              <p className={styles.infoText}>United States</p>
+            </div>
+          </motion.div>
+
+          <motion.div 
+            className={styles.contactInfo}
+            initial={{ y: -50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.2, type: "spring" }}
+          >
+            <Phone className={styles.icon} />
+            <div className={styles.infoContent}>
+              <h3 className={styles.infoTitle}>Contact Us</h3>
+              <p className={styles.infoText}>(123) 23456 789</p>
+              <p className={styles.infoText}>Open: 09:00 am - 01:00 pm</p>
+            </div>
+          </motion.div>
+
+          <motion.div 
+            className={styles.extraInfo}
+            initial={{ x: 100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.4, type: "spring" }}
+          >
+            <Mail className={styles.icon} />
+            <div className={styles.infoContent}>
+              <h3 className={styles.infoTitle}>Email Us</h3>
+              <p className={styles.infoText}>info@earls.com</p>
+              <p className={styles.infoText}>support@earls.com</p>
+            </div>
+          </motion.div>
+        </div>
+      </motion.div>
+
+      <motion.nav 
+        className={styles.navigation}
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 1, delay: 0.6 }}
+      >
+        <Link to="/" className={styles.logo}>
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          >
+            <Star className={styles.logoIcon} />
+          </motion.div>
           Earls
         </Link>
         
-        <div className={cx('nav-links')}>
-          <Link to="/" className={cx('nav-link', dx('gradientBorder'))}>
-            HOME <ArrowRight size={16} />
-          </Link>
-          <Link to="/about" className={cx('nav-link', dx('gradientBorder'))}>
-            ABOUT US <ArrowRight size={16} />
-          </Link>
-          <Link to="/blog" className={cx('nav-link', dx('gradientBorder'))}>
-            BLOG <ArrowRight size={16} />
-          </Link>
-          <Link to="/portfolio" className={cx('nav-link', dx('gradientBorder'))}>
-            PORTFOLIO <ArrowRight size={16} />
-          </Link>
-          <Link to="/shop" className={cx('nav-link', dx('gradientBorder'))}>
-            SHOP <ArrowRight size={16} />
-          </Link>
-          <Link to="/contact" className={cx('nav-link', dx('gradientBorder'))}>
-            CONTACT <ArrowRight size={16} />
-          </Link>
+        <div className={styles.navLinks}>
+          {['HOME', 'ABOUT US', 'BLOG', 'PORTFOLIO', 'SHOP', 'CONTACT'].map((link, index) => (
+            <motion.div
+              key={link}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8 + index * 0.1 }}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Link to="/" className={styles.navLink}>
+                {link} <ChevronRight size={16} />
+              </Link>
+            </motion.div>
+          ))}
         </div>
-      </nav>
+      </motion.nav>
 
-      <div className={cx('hero-section', dx('glassMorphism'))}>
-        <div className={cx('hero-content', ax('floating'))}>
-          <h1 className={cx('hero-title')}>Welcome to Earls</h1>
-          <p className={cx('hero-text')}>Discover our exclusive collection and premium services</p>
-          <button className={cx('cta-button', dx('gradientBorder'), ax('pulsing'))}>
-            Explore Now <ArrowRight size={16} />
-          </button>
+      <motion.div 
+        className={styles.heroSection}
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 1, delay: 1.2 }}
+      >
+        <div className={styles.heroContent}>
+          <motion.h1 
+            className={styles.heroTitle}
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.8, delay: 1.4 }}
+          >
+            Welcome to Earls
+            <motion.span 
+              className={styles.sparkle}
+              animate={{ rotate: 360, scale: [1, 1.2, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              <Sparkles className={styles.sparkleIcon} />
+            </motion.span>
+          </motion.h1>
+
+          <motion.p 
+            className={styles.heroText}
+            initial={{ y: 30, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.8, delay: 1.6 }}
+          >
+            Discover our exclusive collection and premium services
+          </motion.p>
+
+          <motion.div
+            initial={{ y: 30, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.8, delay: 1.8 }}
+            className={styles.ctaContainer}
+          >
+            <Button 
+              className={styles.ctaButton}
+              onClick={() => toast({
+                title: "Welcome to Earls!",
+                description: "Thank you for your interest. We'll be in touch soon!",
+              })}
+            >
+              Explore Now <ArrowRight size={16} />
+            </Button>
+
+            <motion.div 
+              className={styles.awards}
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 0.5, delay: 2 }}
+            >
+              <Award className={styles.awardIcon} />
+              <Heart className={styles.heartIcon} />
+            </motion.div>
+          </motion.div>
         </div>
-      </div>
+
+        <motion.div 
+          className={styles.decorativeElements}
+          animate={{ 
+            rotate: [0, 360],
+            scale: [1, 1.1, 1],
+          }}
+          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+        >
+          <div className={styles.circle} />
+          <div className={styles.square} />
+          <div className={styles.triangle} />
+        </motion.div>
+      </motion.div>
     </div>
   );
 };
